@@ -12,7 +12,7 @@
   ./kk create config -f deployment-kubesphre.yml --with-kubernetes v1.24.2 --with-kubesphere v3.3.
   ```
 * then execute the following command 'nano deployment-kubesphre.yml' in usermode. Then add the following configuration.
-  ```
+```
   hosts:
 - {name: kubesphere1, address: 192.168.1.40, internalAddress: 192.168.1.40, user: ubuntu, privateKeyPath: "~/.ssh/id_ed25519"}
 - {name: kubesphere2, address: 192.168.1.41, internalAddress: 192.168.1.41, user: ubuntu, privateKeyPath: "~/.ssh/id_ed25519"}"
@@ -25,6 +25,5 @@ control-plane:
 worker:
 - kubesphere2
 - kubesphere3
-
-  ```
+```
 * now apply the below command on master "./kk create cluster -f deployment-kubesphre.yml"
