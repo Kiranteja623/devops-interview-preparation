@@ -1,0 +1,30 @@
+* To create kubesphere use t2.medium instances min two.
+  [referhere](https://thenewstack.io/deploy-kubesphere-for-easy-kubernetes-cluster-management/) for installation.
+* create a hostname called as kubesphere for all the nodes by using 'sudo hostnamectl set-hostname kubesphere1'
+*  for each  one use 'sudo nano /etc/hosts' command and edit the hosts with  hosts private ip.
+*  Now add any user example kubbe for all the nodes and set no password privelages.
+*  Then make  ssh-keygen and ssh-copy-id for all the nodes.
+*  then use the following command  for each node 'sudo apt install curl socat conntrack ebtables ipset -y'
+*  for master node only use the following command 'curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.2 sh -'
+*  now execute the following commands  to master
+  ```
+  chmod +x kk
+  ./kk create config -f deployment-kubesphre.yml --with-kubernetes v1.24.2 --with-kubesphere v3.3.
+  ```
+* then execute the following command 'nano deployment-kubesphre.yml' in usermode. Then add the following configuration.
+  ```
+  hosts:
+- {name: kubesphere1, address: 192.168.1.40, internalAddress: 192.168.1.40, user: ubuntu, privateKeyPath: "~/.ssh/id_ed25519"}
+- {name: kubesphere2, address: 192.168.1.41, internalAddress: 192.168.1.41, user: ubuntu, privateKeyPath: "~/.ssh/id_ed25519"}"
+- {name: kubesphere3, address: 192.168.1.42, internalAddress: 192.168.1.42, user: ubuntu, privateKeyPath: "~/.ssh/id_ed25519"}
+roleGroups:
+etcd:
+- kubesphere1
+control-plane:
+- kubesphere1
+worker:
+- kubesphere2
+- kubesphere3
+
+  ```
+* now apply the below command on master "./kk create cluster -f deployment-kubesphre.yml"
